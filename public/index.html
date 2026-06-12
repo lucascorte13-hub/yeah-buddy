@@ -721,11 +721,16 @@
             }
 
             .form-row {
-                flex-direction: column;
+                flex-wrap: wrap;
             }
 
             .form-group {
-                min-width: 100% !important;
+                min-width: 60px;
+                flex: 1;
+            }
+
+            .form-group.wide {
+                min-width: 100%;
             }
 
             .workout-table {
@@ -738,7 +743,7 @@
             }
 
             .nav-tabs {
-                flex-direction: column;
+                flex-direction: row;
             }
 
             .dashboard-layout {
