@@ -743,6 +743,11 @@
             }
 
             .form-group input[type="date"] {
+                max-width: 130px;
+                min-width: 130px;
+            }
+
+            .form-group select {
                 max-width: 140px;
             }
 
@@ -1291,6 +1296,7 @@
             const stepAttr = field.step !== undefined ? ` step="${field.step}"` : '';
             const placeholderAttr = field.placeholder ? ` placeholder="${field.placeholder}"` : '';
             const valueAttr = field.default !== undefined && field.default !== '' ? ` value="${field.default}"` : '';
+            const inputmodeAttr = field.type === 'number' ? (field.step && field.step % 1 !== 0 ? ' inputmode="decimal"' : ' inputmode="numeric"') : '';
 
             let html = `<div class="form-group${wideClass}">`;
             html += `<label for="entry-${field.key}">${escapeHtml(field.label)}</label>`;
@@ -1302,8 +1308,16 @@
                 html += `<datalist id="exercise-suggestions">`;
                 pastExercises.forEach(ex => { html += `<option value="${escapeHtml(ex)}">`; });
                 html += `</datalist>`;
+            } else if (field.type === 'select' && field.options) {
+                html += `<select id="entry-${field.key}">`;
+                field.options.forEach(opt => {
+                    const label = opt === '' ? 'None' : opt;
+                    const selected = opt === field.default ? ' selected' : '';
+                    html += `<option value="${escapeHtml(opt)}"${selected}>${escapeHtml(label)}</option>`;
+                });
+                html += `</select>`;
             } else {
-                html += `<input type="${field.type}" id="entry-${field.key}"${minAttr}${maxAttr}${stepAttr}${placeholderAttr}${valueAttr}>`;
+                html += `<input type="${field.type}" id="entry-${field.key}"${minAttr}${maxAttr}${stepAttr}${placeholderAttr}${valueAttr}${inputmodeAttr}>`;
             }
 
             html += `</div>`;
