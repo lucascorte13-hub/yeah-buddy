@@ -518,24 +518,11 @@
         .day-bg-saturday { background: rgba(127, 140, 141, 0.12); border: 1px solid rgba(127, 140, 141, 0.5); }
         .day-bg-sunday { background: rgba(231, 76, 60, 0.15); border: 1px solid rgba(231, 76, 60, 0.5); }
 
-        /* Day separator */
-        .day-block + .day-block {
-            border-top: 2px solid #e94560;
-        }
-
         .day-block.day-today {
             border: 2px solid rgba(233, 69, 96, 0.8);
             box-shadow: none;
             position: relative;
             z-index: 1;
-        }
-
-        .day-block.day-today + .day-block {
-            border-top: 2px solid #555;
-        }
-
-        .day-block.day-today ~ .day-block + .day-block {
-            border-top: 2px solid #555;
         }
 
         .workout-table .actions-cell {
