@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💪</text></svg>">
     <title>Yeah Buddy!</title>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
     <style>
         * {
             margin: 0;
@@ -930,9 +933,36 @@
             color: #eee;
             margin-bottom: 4px;
         }
+        /* Auth */
+        .auth-container { max-width: 380px; margin: 80px auto; background: #16213e; padding: 25px; border-radius: 12px; border: 1px solid #0f3460; text-align: center; }
+        .auth-container h1 { color: #e94560; margin-bottom: 5px; font-size: 1.5rem; }
+        .auth-container .auth-sub { color: #888; font-size: 0.8rem; margin-bottom: 20px; }
+        .auth-container h2 { color: #e94560; margin-bottom: 15px; font-size: 1.1rem; }
+        .auth-container input { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #0f3460; background: #1a1a2e; color: #eee; font-size: 0.9rem; }
+        .auth-container .btn { width: 100%; margin-bottom: 8px; }
+        .auth-container .auth-toggle { color: #e94560; cursor: pointer; font-size: 0.8rem; }
+        .auth-container .auth-error { color: #e74c3c; font-size: 0.8rem; margin-top: 8px; }
+        .user-bar { max-width: 750px; margin: 0 auto; padding: 4px 20px; text-align: right; font-size: 0.7rem; color: #555; }
+        .user-bar a { color: #e94560; cursor: pointer; margin-left: 8px; }
+        #app-container { display: none; }
     </style>
 </head>
 <body>
+    <!-- Auth Screen -->
+    <div id="auth-container" class="auth-container">
+        <h1>💪 Yeah Buddy!</h1>
+        <p class="auth-sub">Lightweight Baby! WooOoOoo~</p>
+        <h2 id="auth-title">Login</h2>
+        <input type="email" id="auth-email" placeholder="Email">
+        <input type="password" id="auth-password" placeholder="Password">
+        <button class="btn btn-primary" onclick="handleAuth()">Login</button>
+        <p class="auth-toggle" onclick="toggleAuthMode()">Don't have an account? Sign up</p>
+        <p class="auth-error" id="auth-error"></p>
+    </div>
+
+    <!-- App -->
+    <div id="app-container">
+    <div class="user-bar"><span id="user-email"></span><a onclick="logout()">Logout</a></div>
     <header>
         <h1>💪 Yeah Buddy!</h1>
         <p>Lightweight Baby! WooOoOoo~</p>
@@ -1546,8 +1576,8 @@
             if (e.target === document.getElementById('fields-modal')) closeFieldSettings();
         });
 
-        // Initial render of dynamic fields
-        renderDynamicFields();
+        // Initial render of dynamic fields (deferred to auth)
+        // renderDynamicFields();
 
         // Select all text on focus for number and text inputs in forms/modals
         document.addEventListener('focus', (e) => {
@@ -2553,8 +2583,8 @@
             if (e.target === document.getElementById('generate-week-modal')) closeGenerateWeek();
         });
 
-        // Initial render
-        renderWeeks();
+        // Initial render (deferred to auth)
+        // renderWeeks();
 
         // Page switching
         function switchPage(page) {
@@ -3350,6 +3380,103 @@
         document.getElementById('muscle-config-modal').addEventListener('click', (e) => {
             if (e.target === document.getElementById('muscle-config-modal')) closeMuscleConfig();
         });
+    </script>
+    </div><!-- end app-container -->
+
+    <script>
+        // Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyB4Vv9C2uGMyh4TW1F_jC1N6zlFYOJA9no",
+            authDomain: "asset-scout-ab025.firebaseapp.com",
+            projectId: "asset-scout-ab025",
+            storageBucket: "asset-scout-ab025.firebasestorage.app",
+            messagingSenderId: "54068421044",
+            appId: "1:54068421044:web:73ac8150f1942286fed2e1"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        let currentUser = null;
+        let isSignUp = false;
+
+        function toggleAuthMode() {
+            isSignUp = !isSignUp;
+            document.getElementById('auth-title').textContent = isSignUp ? 'Sign Up' : 'Login';
+            document.querySelector('#auth-container .btn').textContent = isSignUp ? 'Sign Up' : 'Login';
+            document.querySelector('.auth-toggle').textContent = isSignUp ? 'Already have an account? Login' : "Don't have an account? Sign up";
+            document.getElementById('auth-error').textContent = '';
+        }
+
+        async function handleAuth() {
+            const email = document.getElementById('auth-email').value.trim();
+            const password = document.getElementById('auth-password').value;
+            document.getElementById('auth-error').textContent = '';
+            if (!email || !password) { document.getElementById('auth-error').textContent = 'Enter email and password.'; return; }
+            try {
+                if (isSignUp) await auth.createUserWithEmailAndPassword(email, password);
+                else await auth.signInWithEmailAndPassword(email, password);
+            } catch (err) { document.getElementById('auth-error').textContent = err.message; }
+        }
+
+        function logout() { auth.signOut(); }
+
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                currentUser = user;
+                document.getElementById('auth-container').style.display = 'none';
+                document.getElementById('app-container').style.display = 'block';
+                document.getElementById('user-email').textContent = user.email;
+                await loadUserData();
+            } else {
+                currentUser = null;
+                document.getElementById('auth-container').style.display = 'block';
+                document.getElementById('app-container').style.display = 'none';
+            }
+        });
+
+        async function loadUserData() {
+            try {
+                const doc = await db.collection('yeahbuddy_users').doc(currentUser.uid).get();
+                if (doc.exists) {
+                    const data = doc.data();
+                    entries = data.entries || [];
+                    dayNotes = data.dayNotes || {};
+                    savedTemplates = data.templates || [];
+                    collapsedWeeks = data.collapsedWeeks || {};
+                    if (data.fieldSettings) fieldSettings = data.fieldSettings;
+                    if (data.cardioFieldSettings) cardioFieldSettings = data.cardioFieldSettings;
+                }
+                fieldSettings.forEach(f => {
+                    if (f.key === 'load' && f.label === 'Load (Kg)') f.label = 'Load';
+                    if (f.key === 'inter' && f.label === 'Rest (min)') f.label = 'Rest';
+                });
+                autoAssignMuscles();
+                renderDynamicFields();
+                renderWeeks();
+            } catch (err) { console.error('Load error:', err); }
+        }
+
+        async function saveToFirestore() {
+            if (!currentUser) return;
+            try {
+                await db.collection('yeahbuddy_users').doc(currentUser.uid).set({
+                    entries, dayNotes, templates: savedTemplates, collapsedWeeks, fieldSettings, cardioFieldSettings,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            } catch (err) { console.error('Save error:', err); }
+        }
+
+        // Override saves to also push to Firestore
+        const _saveEntries = saveEntries;
+        saveEntries = function() { _saveEntries(); saveToFirestore(); };
+        const _saveDayNotes = saveDayNotes;
+        saveDayNotes = function() { _saveDayNotes(); saveToFirestore(); };
+        const _saveTemplates = saveTemplates;
+        saveTemplates = function() { _saveTemplates(); saveToFirestore(); };
+        const _saveCollapsed = saveCollapsed;
+        saveCollapsed = function() { _saveCollapsed(); saveToFirestore(); };
+        const _saveFieldSettings = saveFieldSettingsData;
+        saveFieldSettingsData = function() { _saveFieldSettings(); saveToFirestore(); };
     </script>
 </body>
 </html>
