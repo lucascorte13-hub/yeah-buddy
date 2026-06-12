@@ -1662,7 +1662,7 @@
                 const endStr = weekEnd.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
                 const totalExercises = week.entries.length;
                 const uniqueDays = new Set(week.entries.map(e => e.date)).size;
-                const weekLabel = isCurrent ? `Week ${weekNumber} - Current` : `Week ${weekNumber}`;
+                const weekLabel = `Week ${weekNumber}`;
                 const pastClass = isCurrent ? '' : 'past-week';
 
                 const todayBtnLabel = showTodayOnly ? '📅 Show Week' : '📍 Show Today';
