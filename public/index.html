@@ -1154,11 +1154,7 @@
             { key: 'load', label: 'Load', type: 'number', min: 0, step: 0.5, default: 0 },
             { key: 'rpe', label: 'RPE', type: 'number', min: 1, max: 10, step: 0.5, default: 7 },
             { key: 'inter', label: 'Rest', type: 'number', min: 0, step: 0.5, default: 2 },
-            { key: 'note', label: 'Note', type: 'text', placeholder: 'Optional note...', default: '', wide: true },
-            { key: 'primaryMuscle', label: 'Primary', type: 'select', default: '', options: ['', 'Biceps', 'Calves', 'Chest', 'Core', 'Front Delts', 'Glutes', 'Hamstrings', 'Lats', 'Mid Delts', 'Quads', 'Rear Delts', 'Rhomboids', 'Spine', 'Traps', 'Triceps'] },
-            { key: 'secondaryMuscle', label: 'Secondary', type: 'select', default: '', options: ['', 'Biceps', 'Calves', 'Chest', 'Core', 'Front Delts', 'Glutes', 'Hamstrings', 'Lats', 'Mid Delts', 'Quads', 'Rear Delts', 'Rhomboids', 'Spine', 'Traps', 'Triceps'] },
-            { key: 'tertiaryMuscle', label: 'Tertiary', type: 'select', default: '', options: ['', 'Biceps', 'Calves', 'Chest', 'Core', 'Front Delts', 'Glutes', 'Hamstrings', 'Lats', 'Mid Delts', 'Quads', 'Rear Delts', 'Rhomboids', 'Spine', 'Traps', 'Triceps'] },
-            { key: 'quaternaryMuscle', label: 'Quaternary', type: 'select', default: '', options: ['', 'Biceps', 'Calves', 'Chest', 'Core', 'Front Delts', 'Glutes', 'Hamstrings', 'Lats', 'Mid Delts', 'Quads', 'Rear Delts', 'Rhomboids', 'Spine', 'Traps', 'Triceps'] }
+            { key: 'note', label: 'Note', type: 'text', placeholder: 'Optional note...', default: '', wide: true }
         ];
 
         // Cardio field definitions
@@ -1407,7 +1403,7 @@
 
         function renderFieldSettingsList() {
             const list = document.getElementById('fields-settings-list');
-            const currentSettings = getCurrentFieldSettings();
+            const currentSettings = getCurrentFieldSettings().filter(f => !f.key.includes('Muscle'));
             const defaults = getDefaultFieldsForType();
             const typeLabel = currentEntryType === 'cardio' ? '🏃 Cardio' : '🏋️ Strength';
 
