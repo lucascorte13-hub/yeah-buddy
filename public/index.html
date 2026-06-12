@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💪</text></svg>">
     <title>Yeah Buddy!</title>
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
     <style>
         * {
             margin: 0;
@@ -57,7 +53,7 @@
         }
 
         .container {
-            max-width: 1100px;
+            max-width: 750px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -65,27 +61,28 @@
         /* Form Styles */
         .workout-form {
             background: #16213e;
-            padding: 25px;
+            padding: 10px 15px;
             border-radius: 12px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         .workout-form h2 {
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             color: #e94560;
+            font-size: 1rem;
         }
 
         .form-row {
             display: flex;
-            gap: 10px;
-            margin-bottom: 12px;
+            gap: 8px;
+            margin-bottom: 8px;
             flex-wrap: wrap;
             align-items: flex-end;
         }
 
         .form-group {
             flex: 1;
-            min-width: 100px;
+            min-width: 70px;
         }
 
         .form-group.wide {
@@ -95,8 +92,8 @@
 
         .form-group label {
             display: block;
-            margin-bottom: 4px;
-            font-size: 0.75rem;
+            margin-bottom: 2px;
+            font-size: 0.65rem;
             color: #aaa;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -105,12 +102,12 @@
         .form-group input,
         .form-group select {
             width: 100%;
-            padding: 9px 10px;
+            padding: 6px 8px;
             border: 2px solid #0f3460;
             border-radius: 8px;
             background: #1a1a2e;
             color: #eee;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             transition: border-color 0.3s;
         }
 
@@ -152,8 +149,15 @@
         .btn-danger {
             background: #c0392b;
             color: #fff;
-            padding: 5px 10px;
-            font-size: 0.8rem;
+            width: 28px;
+            height: 28px;
+            padding: 0;
+            font-size: 0.85rem;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
         }
 
         .btn-danger:hover {
@@ -192,7 +196,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
+            padding: 10px 20px;
             background: #0f3460;
             cursor: pointer;
             user-select: none;
@@ -224,7 +228,7 @@
         }
 
         .week-body {
-            padding: 15px;
+            padding: 8px;
             overflow-x: auto;
         }
 
@@ -242,13 +246,21 @@
         .workout-table th {
             text-align: center;
             padding: 8px 10px;
-            color: #aaa;
             font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 1px;
             border-bottom: 2px solid #0f3460;
             white-space: nowrap;
         }
+
+        /* Column header colors match day */
+        .day-bg-monday .workout-table th { color: #2ecc71; }
+        .day-bg-tuesday .workout-table th { color: #3498db; }
+        .day-bg-wednesday .workout-table th { color: #f1c40f; }
+        .day-bg-thursday .workout-table th { color: #8e44ad; }
+        .day-bg-friday .workout-table th { color: #e67e22; }
+        .day-bg-saturday .workout-table th { color: #7f8c8d; }
+        .day-bg-sunday .workout-table th { color: #e74c3c; }
 
         .workout-table td {
             padding: 8px 10px;
@@ -259,6 +271,14 @@
 
         .workout-table tr:last-child td {
             border-bottom: none;
+        }
+
+        .workout-table tbody tr:nth-child(even) {
+            background: rgba(15, 52, 96, 0.3);
+        }
+
+        .workout-table tbody tr:nth-child(odd) {
+            background: rgba(26, 26, 46, 0.5);
         }
 
         .workout-table .note-cell {
@@ -273,8 +293,9 @@
         /* Day block */
         .day-block {
             margin-bottom: 15px;
-            border-radius: 8px;
+            border-radius: 6px;
             overflow: hidden;
+            padding: 0;
         }
 
         .day-block:last-child {
@@ -285,8 +306,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 15px;
-            border-radius: 8px 8px 0 0;
+            padding: 8px 10px;
+            border-radius: 6px 6px 0 0;
         }
 
         .day-header-bar .day-title {
@@ -521,13 +542,41 @@
         .btn-edit {
             background: #2980b9;
             color: #fff;
-            padding: 5px 10px;
-            font-size: 0.8rem;
-            margin-right: 4px;
+            width: 28px;
+            height: 28px;
+            padding: 0;
+            font-size: 0.85rem;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 2px;
+            line-height: 1;
         }
 
         .btn-edit:hover {
             background: #3498db;
+        }
+
+        .btn-duplicate {
+            background: #27ae60;
+            color: #fff;
+            width: 28px;
+            height: 28px;
+            padding: 0;
+            font-size: 0.85rem;
+            border: none;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-right: 2px;
+            line-height: 1;
+        }
+
+        .btn-duplicate:hover {
+            background: #2ecc71;
         }
 
         /* Edit modal */
@@ -553,7 +602,7 @@
             border-radius: 12px;
             padding: 25px;
             width: 90%;
-            max-width: 500px;
+            max-width: 650px;
             max-height: 90vh;
             overflow-y: auto;
         }
@@ -565,7 +614,7 @@
 
         .modal .form-group {
             margin-bottom: 12px;
-            min-width: 100%;
+            min-width: auto;
         }
 
         .modal-actions {
@@ -867,61 +916,9 @@
             color: #eee;
             margin-bottom: 4px;
         }
-        /* Auth styles */
-        .auth-container {
-            max-width: 400px;
-            margin: 80px auto;
-            background: #16213e;
-            padding: 30px;
-            border-radius: 12px;
-            border: 1px solid #0f3460;
-            text-align: center;
-        }
-        .auth-container h2 { color: #e94560; margin-bottom: 20px; }
-        .auth-container input {
-            width: 100%;
-            padding: 10px 14px;
-            margin-bottom: 12px;
-            border-radius: 6px;
-            border: 1px solid #0f3460;
-            background: #1a1a2e;
-            color: #eee;
-            font-size: 0.9rem;
-        }
-        .auth-container button { width: 100%; margin-bottom: 10px; }
-        .auth-container .auth-toggle { color: #e94560; cursor: pointer; font-size: 0.85rem; }
-        .auth-container .auth-error { color: #e74c3c; font-size: 0.8rem; margin-top: 8px; }
-        .user-bar {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 5px 24px;
-            text-align: right;
-            font-size: 0.75rem;
-            color: #666;
-        }
-        .user-bar a { color: #e94560; cursor: pointer; margin-left: 10px; }
-        #app-container { display: none; }
     </style>
 </head>
 <body>
-    <!-- AUTH SCREEN -->
-    <div id="auth-container" class="auth-container">
-        <h1 style="color:#e94560;margin-bottom:5px;">💪 Yeah Buddy!</h1>
-        <p style="color:#888;font-size:0.8rem;margin-bottom:20px;">Lightweight Baby! WooOoOoo~</p>
-        <h2 id="auth-title">Login</h2>
-        <input type="email" id="auth-email" placeholder="Email">
-        <input type="password" id="auth-password" placeholder="Password">
-        <button class="btn btn-primary" onclick="handleAuth()">Login</button>
-        <p class="auth-toggle" onclick="toggleAuthMode()">Don't have an account? Sign up</p>
-        <p class="auth-error" id="auth-error"></p>
-    </div>
-
-    <!-- APP -->
-    <div id="app-container">
-    <div class="user-bar">
-        <span id="user-email"></span>
-        <a onclick="logout()">Logout</a>
-    </div>
     <header>
         <h1>💪 Yeah Buddy!</h1>
         <p>Lightweight Baby! WooOoOoo~</p>
@@ -935,8 +932,8 @@
     <div class="container">
         <!-- Add Exercise Form -->
         <div class="workout-form">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                <h2 style="margin-bottom:0;">Add Exercise</h2>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <h2 style="margin-bottom:0;font-size:0.95rem;">Add Exercise</h2>
                 <div style="display:flex; gap:8px; align-items:center;">
                     <button class="btn btn-secondary btn-small" onclick="openFieldSettings()">⚙️ Fields</button>
                     <button class="btn btn-secondary btn-small" onclick="openGenerateWeek()">🔄 Generate Week</button>
@@ -1006,145 +1003,73 @@
 
     <!-- Edit Modal -->
     <div class="modal-overlay" id="edit-modal">
-        <div class="modal">
+        <div class="modal" style="max-width:380px;">
             <h2>Edit Exercise</h2>
             <input type="hidden" id="edit-id">
-            <div class="form-group">
-                <label for="edit-date">Date</label>
-                <input type="date" id="edit-date">
+            <input type="hidden" id="edit-date">
+            <input type="hidden" id="edit-intensity" value="">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="edit-exercise">Exercise</label>
+                    <input type="text" id="edit-exercise">
+                </div>
             </div>
-            <div class="form-group">
-                <label for="edit-intensity">Day Intensity (applies to whole day)</label>
-                <select id="edit-intensity">
-                    <option value="Alright">Alright</option>
-                    <option value="Wooo">Wooo</option>
-                    <option value="Lightweight Baby">Lightweight Baby</option>
-                </select>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="edit-sets">Sets</label>
+                    <input type="number" id="edit-sets" min="1" inputmode="numeric">
+                </div>
+                <div class="form-group">
+                    <label for="edit-reps">Reps</label>
+                    <input type="number" id="edit-reps" min="1" inputmode="numeric">
+                </div>
+                <div class="form-group">
+                    <label for="edit-load">Load</label>
+                    <input type="number" id="edit-load" min="0" step="0.5" inputmode="decimal">
+                </div>
             </div>
-            <div class="form-group">
-                <label for="edit-exercise">Exercise</label>
-                <input type="text" id="edit-exercise">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="edit-rpe">RPE</label>
+                    <input type="number" id="edit-rpe" min="1" max="10" step="0.5" inputmode="decimal">
+                </div>
+                <div class="form-group">
+                    <label for="edit-inter">Rest</label>
+                    <input type="number" id="edit-inter" min="0" step="0.5" inputmode="decimal">
+                </div>
             </div>
-            <div class="form-group">
-                <label for="edit-sets">Sets</label>
-                <input type="number" id="edit-sets" min="1">
-            </div>
-            <div class="form-group">
-                <label for="edit-reps">Reps</label>
-                <input type="number" id="edit-reps" min="1">
-            </div>
-            <div class="form-group">
-                <label for="edit-load">Load</label>
-                <input type="number" id="edit-load" min="0" step="0.5">
-            </div>
-            <div class="form-group">
-                <label for="edit-rpe">RPE</label>
-                <input type="number" id="edit-rpe" min="1" max="10" step="0.5">
-            </div>
-            <div class="form-group">
-                <label for="edit-inter">Rest</label>
-                <input type="number" id="edit-inter" min="0" step="0.5">
-            </div>
-            <div class="form-group">
-                <label for="edit-note">Note</label>
-                <input type="text" id="edit-note">
-            </div>
-            <div class="form-group">
-                <label for="edit-primary-muscle">Primary Muscle</label>
-                <select id="edit-primary-muscle">
-                    <option value="">None</option>
-                    <option value="Biceps">Biceps</option>
-                    <option value="Calves">Calves</option>
-                    <option value="Chest">Chest</option>
-                    <option value="Core">Core</option>
-                    <option value="Front Delts">Front Delts</option>
-                    <option value="Glutes">Glutes</option>
-                    <option value="Hamstrings">Hamstrings</option>
-                    <option value="Lats">Lats</option>
-                    <option value="Mid Delts">Mid Delts</option>
-                    <option value="Quads">Quads</option>
-                    <option value="Rear Delts">Rear Delts</option>
-                    <option value="Rhomboids">Rhomboids</option>
-                    <option value="Spine">Spine</option>
-                    <option value="Traps">Traps</option>
-                    <option value="Triceps">Triceps</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="edit-secondary-muscle">Secondary Muscle</label>
-                <select id="edit-secondary-muscle">
-                    <option value="">None</option>
-                    <option value="Biceps">Biceps</option>
-                    <option value="Calves">Calves</option>
-                    <option value="Chest">Chest</option>
-                    <option value="Core">Core</option>
-                    <option value="Front Delts">Front Delts</option>
-                    <option value="Glutes">Glutes</option>
-                    <option value="Hamstrings">Hamstrings</option>
-                    <option value="Lats">Lats</option>
-                    <option value="Mid Delts">Mid Delts</option>
-                    <option value="Quads">Quads</option>
-                    <option value="Rear Delts">Rear Delts</option>
-                    <option value="Rhomboids">Rhomboids</option>
-                    <option value="Spine">Spine</option>
-                    <option value="Traps">Traps</option>
-                    <option value="Triceps">Triceps</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="edit-tertiary-muscle">Tertiary Muscle</label>
-                <select id="edit-tertiary-muscle">
-                    <option value="">None</option>
-                    <option value="Biceps">Biceps</option>
-                    <option value="Calves">Calves</option>
-                    <option value="Chest">Chest</option>
-                    <option value="Core">Core</option>
-                    <option value="Front Delts">Front Delts</option>
-                    <option value="Glutes">Glutes</option>
-                    <option value="Hamstrings">Hamstrings</option>
-                    <option value="Lats">Lats</option>
-                    <option value="Mid Delts">Mid Delts</option>
-                    <option value="Quads">Quads</option>
-                    <option value="Rear Delts">Rear Delts</option>
-                    <option value="Rhomboids">Rhomboids</option>
-                    <option value="Spine">Spine</option>
-                    <option value="Traps">Traps</option>
-                    <option value="Triceps">Triceps</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="edit-quaternary-muscle">Quaternary Muscle</label>
-                <select id="edit-quaternary-muscle">
-                    <option value="">None</option>
-                    <option value="Biceps">Biceps</option>
-                    <option value="Calves">Calves</option>
-                    <option value="Chest">Chest</option>
-                    <option value="Core">Core</option>
-                    <option value="Front Delts">Front Delts</option>
-                    <option value="Glutes">Glutes</option>
-                    <option value="Hamstrings">Hamstrings</option>
-                    <option value="Lats">Lats</option>
-                    <option value="Mid Delts">Mid Delts</option>
-                    <option value="Quads">Quads</option>
-                    <option value="Rear Delts">Rear Delts</option>
-                    <option value="Rhomboids">Rhomboids</option>
-                    <option value="Spine">Spine</option>
-                    <option value="Traps">Traps</option>
-                    <option value="Triceps">Triceps</option>
-                </select>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="edit-note">Note</label>
+                    <input type="text" id="edit-note">
+                </div>
             </div>
             <div class="modal-actions">
-                <button class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="saveEdit()">Save</button>
+                <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveEdit()">Save</button>
             </div>
         </div>
     </div>
 
     <!-- Reorder Modal -->
     <div class="modal-overlay" id="reorder-modal">
-        <div class="modal">
-            <h2>⚙️ Reorder Exercises</h2>
-            <p style="color:#aaa; margin-bottom:15px; font-size:0.85rem;">Drag exercises to reorder them</p>
+        <div class="modal" style="max-width:420px;">
+            <h2>⚙️ Edit Day</h2>
+            <div class="form-row" style="margin-bottom:15px;">
+                <div class="form-group">
+                    <label for="reorder-date">Date</label>
+                    <input type="date" id="reorder-date">
+                </div>
+                <div class="form-group">
+                    <label for="reorder-intensity">Intensity</label>
+                    <select id="reorder-intensity">
+                        <option value="Alright">Alright</option>
+                        <option value="Wooo">Wooo</option>
+                        <option value="Lightweight Baby">Lightweight Baby</option>
+                    </select>
+                </div>
+            </div>
+            <p style="color:#aaa; margin-bottom:10px; font-size:0.85rem;">Drag exercises to reorder</p>
             <div id="reorder-list"></div>
             <div class="modal-actions">
                 <button class="btn btn-secondary" onclick="closeReorderModal()">Cancel</button>
@@ -1155,17 +1080,24 @@
 
     <!-- Field Settings Modal -->
     <div class="modal-overlay" id="fields-modal">
-        <div class="modal">
+        <div class="modal" style="max-width:350px;">
             <h2>⚙️ Field Settings</h2>
-            <p style="color:#aaa; margin-bottom:10px; font-size:0.85rem;">Toggle fields, drag to reorder, or add custom blank fields</p>
+            <div style="margin-bottom:12px;">
+                <label style="font-size:0.65rem;color:#aaa;text-transform:uppercase;letter-spacing:1px;">Type</label>
+                <select id="fields-type-select" onchange="onFieldsTypeChange()" style="width:100%;padding:6px 8px;border:2px solid #0f3460;border-radius:8px;background:#1a1a2e;color:#eee;font-size:0.85rem;">
+                    <option value="strength">🏋️ Strength</option>
+                    <option value="cardio">🏃 Cardio</option>
+                </select>
+            </div>
+            <p style="color:#aaa; margin-bottom:10px; font-size:0.75rem;">Toggle fields, drag to reorder, or add custom fields</p>
             <div id="fields-settings-list"></div>
-            <div style="margin-top:15px;">
-                <input type="text" id="new-field-name" placeholder="New field name..." style="padding:8px 10px; border:2px solid #0f3460; border-radius:8px; background:#1a1a2e; color:#eee; font-size:0.9rem; width:65%;">
-                <button class="btn btn-secondary btn-small" onclick="addCustomField()" style="margin-left:8px;">+ Add Field</button>
+            <div style="margin-top:12px;">
+                <input type="text" id="new-field-name" placeholder="New field name..." style="padding:6px 8px; border:2px solid #0f3460; border-radius:8px; background:#1a1a2e; color:#eee; font-size:0.85rem; width:65%;">
+                <button class="btn btn-secondary btn-small" onclick="addCustomField()" style="margin-left:8px;">+ Add</button>
             </div>
             <div class="modal-actions">
-                <button class="btn btn-secondary" onclick="closeFieldSettings()">Close</button>
-                <button class="btn btn-primary" onclick="saveFieldSettings()">Save</button>
+                <button type="button" class="btn btn-secondary" onclick="closeFieldSettings()">Close</button>
+                <button type="button" class="btn btn-primary" onclick="saveFieldSettings()">Save</button>
             </div>
         </div>
     </div>
@@ -1272,8 +1204,11 @@
         // Track collapsed state
         let collapsedWeeks = JSON.parse(localStorage.getItem(ENV_PREFIX + 'yeahBuddyCollapsed')) || {};
 
-        // Set default date to today
-        entryDate.value = new Date().toISOString().split('T')[0];
+        // Set default date to today (Brazil time)
+        function getTodayBrazil() {
+            return new Date().toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' });
+        }
+        entryDate.value = getTodayBrazil();
 
         // Collapse form
         let formCollapsed = false;
@@ -1421,8 +1356,15 @@
 
         // Field Settings Modal
         function openFieldSettings() {
+            document.getElementById('fields-type-select').value = currentEntryType;
             renderFieldSettingsList();
             document.getElementById('fields-modal').classList.add('active');
+        }
+
+        function onFieldsTypeChange() {
+            currentEntryType = document.getElementById('fields-type-select').value;
+            document.getElementById('entry-type').value = currentEntryType;
+            renderFieldSettingsList();
         }
 
         function closeFieldSettings() {
@@ -1585,8 +1527,16 @@
             if (e.target === document.getElementById('fields-modal')) closeFieldSettings();
         });
 
-        // Initial render of dynamic fields (will re-run after auth loads data)
-        // renderDynamicFields(); -- deferred to loadUserData()
+        // Initial render of dynamic fields
+        renderDynamicFields();
+
+        // Select all text on focus for number and text inputs in forms/modals
+        document.addEventListener('focus', (e) => {
+            if (e.target.matches('input[type="number"], input[type="text"]') &&
+                (e.target.closest('.workout-form') || e.target.closest('.modal'))) {
+                e.target.select();
+            }
+        }, true);
 
         function saveEntries() {
             localStorage.setItem(ENV_PREFIX + 'yeahBuddyEntries', JSON.stringify(entries));
@@ -1688,7 +1638,7 @@
             }
 
             // Determine current week key
-            const today = new Date().toISOString().split('T')[0];
+            const today = getTodayBrazil();
             const { year: curYear, week: curWeek } = getWeekInfo(today);
             const currentWeekKey = `${curYear}-W${String(curWeek).padStart(2, '0')}`;
 
@@ -1712,21 +1662,25 @@
                 const endStr = weekEnd.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
                 const totalExercises = week.entries.length;
                 const uniqueDays = new Set(week.entries.map(e => e.date)).size;
-                const weekLabel = isCurrent ? `Current Week ${weekNumber}` : `Week ${weekNumber}`;
+                const weekLabel = isCurrent ? `Week ${weekNumber} - Current` : `Week ${weekNumber}`;
                 const pastClass = isCurrent ? '' : 'past-week';
 
                 const todayBtnLabel = showTodayOnly ? '📅 Show Week' : '📍 Show Today';
-                const todayBtn = isCurrent ? `<button class="btn btn-small" style="background:#e94560;color:#fff;margin-left:10px;font-size:0.7rem;" onclick="event.stopPropagation(); toggleTodayOnly()">${todayBtnLabel}</button>` : '';
+                const todayStr = getTodayBrazil();
+                const hasTodayEntries = isCurrent && week.entries.some(e => e.date === todayStr);
+                const todayBtnDisabled = !hasTodayEntries && !showTodayOnly;
+                const todayBtnStyle = todayBtnDisabled
+                    ? 'background:#555;color:#888;cursor:not-allowed;'
+                    : 'background:#e94560;color:#fff;';
 
                 return `
                     <div class="week-section ${pastClass}">
-                        <div class="week-header" onclick="toggleWeek('${week.key}')" style="position:relative;">
+                        <div class="week-header" onclick="toggleWeek('${week.key}')">
                             <div>
-                                <h3>${weekLabel} — ${startStr} to ${endStr}</h3>
-                                <span class="week-summary">${uniqueDays} day(s) · ${totalExercises} exercise(s)</span>
+                                <h3>${weekLabel} <span style="color:#888;font-size:0.75rem;font-weight:normal;">— ${startStr} to ${endStr}</span></h3>
                             </div>
-                            ${isCurrent ? `<button class="btn btn-small" style="position:absolute;left:50%;transform:translateX(-50%);background:#e94560;color:#fff;font-size:0.7rem;" onclick="event.stopPropagation(); toggleTodayOnly()">${todayBtnLabel}</button>` : ''}
-                            <div style="display:flex;align-items:center;gap:8px;">
+                            <div style="display:flex;align-items:center;gap:12px;">
+                                ${isCurrent ? `<button class="btn btn-small" style="${todayBtnStyle}font-size:0.65rem;" onclick="event.stopPropagation(); ${todayBtnDisabled ? '' : 'toggleTodayOnly()'}" ${todayBtnDisabled ? 'disabled' : ''}>${todayBtnLabel}</button>` : ''}
                 ${!isCollapsed ? `<button class="btn btn-danger btn-small" onclick="event.stopPropagation(); deleteWeek('${week.key}')" title="Delete week" style="font-size:0.9rem;padding:4px 8px;">✕</button>` : ''}
                                 <span class="toggle-icon ${isCollapsed ? 'collapsed' : ''}">▼</span>
                             </div>
@@ -1737,6 +1691,18 @@
                     </div>
                 `;
             }).join('');
+
+            // Re-apply today-only filter if active
+            if (showTodayOnly) {
+                setTimeout(() => {
+                    const dayBlocks = document.querySelectorAll('.day-block');
+                    dayBlocks.forEach(block => {
+                        if (!block.classList.contains('day-today')) {
+                            block.style.display = 'none';
+                        }
+                    });
+                }, 0);
+            }
         }
 
         // Day background color by weekday
@@ -1791,6 +1757,7 @@
                                 ${cells}
                                 <td class="actions-cell">
                                     <button class="btn btn-edit btn-small" onclick="editEntry(${entry.id})">✎</button>
+                                    <button class="btn btn-duplicate" onclick="duplicateEntry(${entry.id})">♻</button>
                                     <button class="btn btn-danger btn-small" onclick="deleteEntry(${entry.id})">✕</button>
                                 </td>
                             </tr>
@@ -1831,6 +1798,7 @@
                                 ${cells}
                                 <td class="actions-cell">
                                     <button class="btn btn-edit btn-small" onclick="editEntry(${entry.id})">✎</button>
+                                    <button class="btn btn-duplicate" onclick="duplicateEntry(${entry.id})">♻</button>
                                     <button class="btn btn-danger btn-small" onclick="deleteEntry(${entry.id})">✕</button>
                                 </td>
                             </tr>
@@ -1853,7 +1821,7 @@
                     `;
                 }
 
-                const todayStr = new Date().toISOString().split('T')[0];
+                const todayStr = getTodayBrazil();
                 const isToday = day.date === todayStr;
                 const dayExtraClass = isToday ? ' day-today' : '';
 
@@ -1864,10 +1832,10 @@
                                 <span class="day-title">${getDayName(day.date)}</span>
                                 <span class="day-date">${formatDate(day.date)}</span>
                             </div>
-                            ${day.date === new Date().toISOString().split('T')[0] ? '<span style="position:absolute;left:50%;transform:translateX(-50%);background:#e94560;color:#fff;font-size:0.6rem;padding:3px 10px;border-radius:4px;font-weight:bold;letter-spacing:1px;">TODAY - YEAH BUDDY!</span>' : ''}
+                            ${day.date === getTodayBrazil() ? '<span style="position:absolute;left:50%;transform:translateX(-50%);background:#e94560;color:#fff;font-size:0.6rem;padding:3px 10px;border-radius:4px;font-weight:bold;letter-spacing:1px;">TODAY - YEAH BUDDY!</span>' : ''}
                             <div>
-                                <button class="btn-reorder" onclick="openReorderModal('${day.date}')" title="Reorder exercises">⚙️</button>
-                                <span class="day-intensity-badge ${getIntensityClass(dayIntensity)}" onclick="cycleIntensity('${day.date}')" style="cursor:pointer;" title="Click to change intensity">${escapeHtml(dayIntensity)}</span>
+                                <button class="btn-reorder" onclick="openReorderModal('${day.date}')" title="Edit Day">⚙️</button>
+                                <span class="day-intensity-badge ${getIntensityClass(dayIntensity)}">${escapeHtml(dayIntensity)}</span>
                             </div>
                         </div>
                         ${strengthTable}
@@ -2089,6 +2057,17 @@
             renderWeeks();
         }
 
+        // Duplicate entry (insert copy right after the original)
+        function duplicateEntry(id) {
+            const idx = entries.findIndex(e => Number(e.id) === Number(id));
+            if (idx === -1) return;
+            const original = entries[idx];
+            const copy = { ...original, id: Date.now() + Math.random() * 10000 };
+            entries.splice(idx + 1, 0, copy);
+            saveEntries();
+            renderWeeks();
+        }
+
         // Edit entry
         function editEntry(id) {
             const entry = entries.find(e => e.id === id);
@@ -2104,10 +2083,6 @@
             document.getElementById('edit-rpe').value = entry.rpe;
             document.getElementById('edit-inter').value = entry.inter;
             document.getElementById('edit-note').value = entry.note || '';
-            document.getElementById('edit-primary-muscle').value = entry.primaryMuscle || '';
-            document.getElementById('edit-secondary-muscle').value = entry.secondaryMuscle || '';
-            document.getElementById('edit-tertiary-muscle').value = entry.tertiaryMuscle || '';
-            document.getElementById('edit-quaternary-muscle').value = entry.quaternaryMuscle || '';
 
             document.getElementById('edit-modal').classList.add('active');
         }
@@ -2117,8 +2092,8 @@
         }
 
         function saveEdit() {
-            const id = parseInt(document.getElementById('edit-id').value);
-            const entry = entries.find(e => e.id === id);
+            const id = Number(document.getElementById('edit-id').value);
+            const entry = entries.find(e => Number(e.id) === id);
             if (!entry) return;
 
             const oldDate = entry.date;
@@ -2130,10 +2105,6 @@
             entry.rpe = parseFloat(document.getElementById('edit-rpe').value) || 0;
             entry.inter = parseFloat(document.getElementById('edit-inter').value) || 0;
             entry.note = document.getElementById('edit-note').value.trim();
-            entry.primaryMuscle = document.getElementById('edit-primary-muscle').value;
-            entry.secondaryMuscle = document.getElementById('edit-secondary-muscle').value;
-            entry.tertiaryMuscle = document.getElementById('edit-tertiary-muscle').value;
-            entry.quaternaryMuscle = document.getElementById('edit-quaternary-muscle').value;
 
             // Intensity applies to the whole day — update all entries on that date
             const newIntensity = document.getElementById('edit-intensity').value;
@@ -2166,6 +2137,11 @@
             const dayEntries = entries.filter(e => e.date === dateKey);
             reorderIds = dayEntries.map(e => e.id);
 
+            // Populate date and intensity
+            document.getElementById('reorder-date').value = dateKey;
+            const dayIntensity = dayEntries.length > 0 ? dayEntries[0].intensity : 'Wooo';
+            document.getElementById('reorder-intensity').value = dayIntensity;
+
             const list = document.getElementById('reorder-list');
             list.innerHTML = dayEntries.map(entry => `
                 <div class="reorder-item" draggable="true" data-id="${entry.id}">
@@ -2187,12 +2163,22 @@
         }
 
         function saveReorder() {
+            // Get updated date and intensity
+            const newDate = document.getElementById('reorder-date').value;
+            const newIntensity = document.getElementById('reorder-intensity').value;
+
             // Get the new order from DOM
             const items = document.querySelectorAll('#reorder-list .reorder-item');
-            const newOrder = Array.from(items).map(el => parseInt(el.dataset.id));
+            const newOrder = Array.from(items).map(el => Number(el.dataset.id));
 
             // Reordered day entries
-            const dayEntries = newOrder.map(id => entries.find(e => e.id === id)).filter(Boolean);
+            const dayEntries = newOrder.map(id => entries.find(e => Number(e.id) === id)).filter(Boolean);
+
+            // Update date and intensity on all day entries
+            dayEntries.forEach(e => {
+                e.date = newDate;
+                e.intensity = newIntensity;
+            });
 
             // Find the indices of entries for this date in the original array
             const otherEntries = entries.filter(e => e.date !== reorderDate);
@@ -2317,7 +2303,7 @@
             const allSorted = [...weeks].sort((a, b) => a.key.localeCompare(b.key));
 
             // Determine current week key
-            const todayStr = new Date().toISOString().split('T')[0];
+            const todayStr = getTodayBrazil();
             const { year: curYear, week: curWeek } = getWeekInfo(todayStr);
             const currentWeekKey = `${curYear}-W${String(curWeek).padStart(2, '0')}`;
 
@@ -2548,8 +2534,8 @@
             if (e.target === document.getElementById('generate-week-modal')) closeGenerateWeek();
         });
 
-        // Initial render (will re-run after auth loads data)
-        // renderWeeks(); -- deferred to loadUserData()
+        // Initial render
+        renderWeeks();
 
         // Page switching
         function switchPage(page) {
@@ -2860,7 +2846,7 @@
             if (strengthEntries.length === 0) return '<p style="color:#aaa;text-align:center;padding:40px;">No data yet</p>';
 
             // Get current week entries only
-            const todayStr = new Date().toISOString().split('T')[0];
+            const todayStr = getTodayBrazil();
             const { year: curYear, week: curWeek } = getWeekInfo(todayStr);
             const currentWeekKey = `${curYear}-W${String(curWeek).padStart(2, '0')}`;
 
@@ -3062,8 +3048,8 @@
         // Cycle Analysis
         function renderCycleAnalysis() {
             const dates = entries.map(e => e.date).sort();
-            const minDate = dates.length > 0 ? dates[0] : new Date().toISOString().split('T')[0];
-            const maxDate = dates.length > 0 ? dates[dates.length - 1] : new Date().toISOString().split('T')[0];
+            const minDate = dates.length > 0 ? dates[0] : getTodayBrazil();
+            const maxDate = dates.length > 0 ? dates[dates.length - 1] : getTodayBrazil();
 
             let html = `
                 <div class="chart-title">🔄 Cycle Analysis</div>
@@ -3345,141 +3331,6 @@
         document.getElementById('muscle-config-modal').addEventListener('click', (e) => {
             if (e.target === document.getElementById('muscle-config-modal')) closeMuscleConfig();
         });
-    </script>
-    </div><!-- end app-container -->
-
-    <script>
-        // ===== FIREBASE INIT =====
-        const firebaseConfig = {
-            apiKey: "AIzaSyB4Vv9C2uGMyh4TW1F_jC1N6zlFYOJA9no",
-            authDomain: "asset-scout-ab025.firebaseapp.com",
-            projectId: "asset-scout-ab025",
-            storageBucket: "asset-scout-ab025.firebasestorage.app",
-            messagingSenderId: "54068421044",
-            appId: "1:54068421044:web:73ac8150f1942286fed2e1"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-
-        let currentUser = null;
-        let isSignUp = false;
-
-        function toggleAuthMode() {
-            isSignUp = !isSignUp;
-            document.getElementById('auth-title').textContent = isSignUp ? 'Sign Up' : 'Login';
-            document.querySelector('#auth-container button').textContent = isSignUp ? 'Sign Up' : 'Login';
-            document.querySelector('.auth-toggle').textContent = isSignUp ? 'Already have an account? Login' : "Don't have an account? Sign up";
-            document.getElementById('auth-error').textContent = '';
-        }
-
-        async function handleAuth() {
-            const email = document.getElementById('auth-email').value.trim();
-            const password = document.getElementById('auth-password').value;
-            const errorEl = document.getElementById('auth-error');
-            errorEl.textContent = '';
-
-            if (!email || !password) {
-                errorEl.textContent = 'Please enter email and password.';
-                return;
-            }
-
-            try {
-                if (isSignUp) {
-                    await auth.createUserWithEmailAndPassword(email, password);
-                } else {
-                    await auth.signInWithEmailAndPassword(email, password);
-                }
-            } catch (err) {
-                errorEl.textContent = err.message;
-            }
-        }
-
-        function logout() {
-            auth.signOut();
-        }
-
-        // Listen for auth state changes
-        auth.onAuthStateChanged(async (user) => {
-            if (user) {
-                currentUser = user;
-                document.getElementById('auth-container').style.display = 'none';
-                document.getElementById('app-container').style.display = 'block';
-                document.getElementById('user-email').textContent = user.email;
-                await loadUserData();
-            } else {
-                currentUser = null;
-                document.getElementById('auth-container').style.display = 'block';
-                document.getElementById('app-container').style.display = 'none';
-            }
-        });
-
-        // ===== FIRESTORE DATA LAYER =====
-        async function loadUserData() {
-            try {
-                const doc = await db.collection('yeahbuddy_users').doc(currentUser.uid).get();
-                if (doc.exists) {
-                    const data = doc.data();
-                    entries = data.entries || [];
-                    dayNotes = data.dayNotes || {};
-                    savedTemplates = data.templates || [];
-                    collapsedWeeks = data.collapsedWeeks || {};
-                    fieldSettings = data.fieldSettings || defaultFields.map(f => ({ ...f, enabled: true }));
-                    cardioFieldSettings = data.cardioFieldSettings || cardioFields.map(f => ({ ...f, enabled: true }));
-                } else {
-                    // New user — start fresh
-                    entries = [];
-                    dayNotes = {};
-                    savedTemplates = [];
-                    collapsedWeeks = {};
-                    fieldSettings = defaultFields.map(f => ({ ...f, enabled: true }));
-                    cardioFieldSettings = cardioFields.map(f => ({ ...f, enabled: true }));
-                }
-                // Migrate labels
-                fieldSettings.forEach(f => {
-                    if (f.key === 'load' && f.label === 'Load (Kg)') f.label = 'Load';
-                    if (f.key === 'inter' && f.label === 'Rest (min)') f.label = 'Rest';
-                });
-                autoAssignMuscles();
-                renderDynamicFields();
-                renderWeeks();
-            } catch (err) {
-                console.error('Error loading data:', err);
-            }
-        }
-
-        async function saveToFirestore() {
-            if (!currentUser) return;
-            try {
-                await db.collection('yeahbuddy_users').doc(currentUser.uid).set({
-                    entries: entries,
-                    dayNotes: dayNotes,
-                    templates: savedTemplates,
-                    collapsedWeeks: collapsedWeeks,
-                    fieldSettings: fieldSettings,
-                    cardioFieldSettings: cardioFieldSettings,
-                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-            } catch (err) {
-                console.error('Error saving data:', err);
-            }
-        }
-
-        // Override save functions to use Firestore
-        const _origSaveEntries = saveEntries;
-        saveEntries = function() { _origSaveEntries(); saveToFirestore(); };
-
-        const _origSaveDayNotes = saveDayNotes;
-        saveDayNotes = function() { _origSaveDayNotes(); saveToFirestore(); };
-
-        const _origSaveTemplates = saveTemplates;
-        saveTemplates = function() { _origSaveTemplates(); saveToFirestore(); };
-
-        const _origSaveCollapsed = saveCollapsed;
-        saveCollapsed = function() { _origSaveCollapsed(); saveToFirestore(); };
-
-        const _origSaveFieldSettings = saveFieldSettingsData;
-        saveFieldSettingsData = function() { _origSaveFieldSettings(); saveToFirestore(); };
     </script>
 </body>
 </html>
