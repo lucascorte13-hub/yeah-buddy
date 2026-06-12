@@ -732,13 +732,15 @@
                 padding: 6px 6px;
             }
 
-            .form-group input[type="date"] {
-                max-width: 130px;
-                min-width: 130px;
+            .form-group input[type="date"],
+            .form-group select {
+                width: 100%;
+                max-width: 100%;
             }
 
-            .form-group select {
-                max-width: 140px;
+            .form-row .form-group {
+                flex: 1 1 0;
+                min-width: 0;
             }
 
             .nav-tabs {
