@@ -1236,9 +1236,9 @@
         // Get active fields based on type
         function getActiveFields() {
             if (currentEntryType === 'cardio') {
-                return cardioFieldSettings.filter(f => f.enabled);
+                return cardioFieldSettings.filter(f => f.enabled && !f.key.includes('Muscle'));
             }
-            return fieldSettings.filter(f => f.enabled);
+            return fieldSettings.filter(f => f.enabled && !f.key.includes('Muscle'));
         }
 
         // Render dynamic form fields
