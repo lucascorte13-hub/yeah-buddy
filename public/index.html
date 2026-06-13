@@ -4,27 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💪</text></svg>">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Yeah Buddy!">
-    <script>
-    // Generate apple-touch-icon dynamically
-    (function() {
-        const canvas = document.createElement('canvas');
-        canvas.width = 180; canvas.height = 180;
-        const ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#1a1a2e';
-        ctx.fillRect(0, 0, 180, 180);
-        ctx.font = '120px serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('💪', 90, 95);
-        const link = document.createElement('link');
-        link.rel = 'apple-touch-icon';
-        link.href = canvas.toDataURL('image/png');
-        document.head.appendChild(link);
-    })();
-    </script>
     <title>Yeah Buddy!</title>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
@@ -68,7 +47,7 @@
 
         .header-center {
             display: flex;
-            gap: 4px;
+            gap: 10px;
             justify-content: center;
         }
 
@@ -83,30 +62,19 @@
         }
 
         /* Form Styles */
-        .workout-form {
-            background: #16213e;
-            padding: 10px 15px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-        }
-
-        .workout-form h2 {
-            margin-bottom: 10px;
-            color: #e94560;
-            font-size: 1rem;
-        }
+        /* (workout-form removed - now a modal) */
 
         .form-row {
             display: flex;
             gap: 8px;
             margin-bottom: 8px;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             align-items: flex-end;
         }
 
         .form-group {
             flex: 1;
-            min-width: 70px;
+            min-width: 55px;
         }
 
         .form-group.wide {
@@ -732,16 +700,11 @@
             }
 
             .form-row {
-                flex-wrap: wrap;
+                flex-direction: column;
             }
 
             .form-group {
-                min-width: 60px;
-                flex: 1;
-            }
-
-            .form-group.wide {
-                min-width: 100%;
+                min-width: 100% !important;
             }
 
             .workout-table {
@@ -753,25 +716,8 @@
                 padding: 6px 6px;
             }
 
-            .form-group input[type="date"],
-            .form-group select {
-                width: 100%;
-                max-width: 100%;
-            }
-
-            .form-row .form-group {
-                flex: 1 1 0;
-                min-width: 0;
-                overflow: hidden;
-            }
-
-            .form-group input[type="date"] {
-                -webkit-appearance: none;
-                font-size: 0.8rem;
-            }
-
             .nav-tabs {
-                flex-direction: row;
+                flex-direction: column;
             }
 
             .dashboard-layout {
@@ -789,26 +735,40 @@
         /* Navigation Tabs */
         .nav-tabs {
             display: flex;
-            gap: 4px;
+            gap: 20px;
         }
 
         .nav-tab {
             padding: 8px 20px;
             border-radius: 6px;
-            border: 1px solid #0f3460;
-            background: #16213e;
-            color: #888;
+            border: none;
+            color: #fff;
             font-size: 0.85rem;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.2s;
+            opacity: 0.5;
         }
 
-        .nav-tab:hover { border-color: #e94560; color: #eee; }
-        .nav-tab.active {
+        .nav-tab.active, .nav-tab:hover {
+            opacity: 1;
+        }
+
+        #nav-activities {
             background: #e94560;
-            color: #fff;
-            border-color: #e94560;
+        }
+
+        #nav-performance {
+            background: #2980b9;
+        }
+
+        .nav-tab-add {
+            background: #27ae60;
+            opacity: 1;
+        }
+
+        .nav-tab-add:hover {
+            background: #2ecc71;
         }
 
         /* Page containers */
@@ -847,7 +807,7 @@
         }
 
         .dash-nav-btn:hover { background: #0f3460; color: #eee; }
-        .dash-nav-btn.active { background: #e94560; color: #fff; font-weight: bold; }
+        .dash-nav-btn.active { background: #2980b9; color: #fff; font-weight: bold; }
 
         .dashboard-main {
             flex: 1;
@@ -867,7 +827,7 @@
         .chart-title {
             font-size: 1.1rem;
             font-weight: bold;
-            color: #e94560;
+            color: #3498db;
             margin-bottom: 15px;
         }
 
@@ -899,7 +859,7 @@
         .stat-box .stat-value {
             font-size: 1.8rem;
             font-weight: bold;
-            color: #e94560;
+            color: #3498db;
         }
 
         .stat-box .stat-label {
@@ -949,7 +909,6 @@
             color: #eee;
             margin-bottom: 4px;
         }
-        /* Auth */
         .auth-container { max-width: 380px; margin: 80px auto; background: #16213e; padding: 25px; border-radius: 12px; border: 1px solid #0f3460; text-align: center; }
         .auth-container h1 { color: #e94560; margin-bottom: 5px; font-size: 1.5rem; }
         .auth-container .auth-sub { color: #888; font-size: 0.8rem; margin-bottom: 20px; }
@@ -964,7 +923,6 @@
     </style>
 </head>
 <body>
-    <!-- Auth Screen -->
     <div id="auth-container" class="auth-container">
         <h1>💪 Yeah Buddy!</h1>
         <p class="auth-sub">Lightweight Baby! WooOoOoo~</p>
@@ -975,8 +933,6 @@
         <p class="auth-toggle" onclick="toggleAuthMode()">Don't have an account? Sign up</p>
         <p class="auth-error" id="auth-error"></p>
     </div>
-
-    <!-- App -->
     <div id="app-container">
     <div class="user-bar"><span id="user-email"></span><a onclick="logout()">Logout</a></div>
     <header>
@@ -984,27 +940,41 @@
         <p>Lightweight Baby! WooOoOoo~</p>
         <div class="header-center">
             <button class="nav-tab active" id="nav-activities" onclick="switchPage('activities')">🏋️ Activities</button>
-            <button class="nav-tab" id="nav-performance" onclick="switchPage('performance')">📊 Performance</button>
+            <button class="nav-tab nav-tab-perf" id="nav-performance" onclick="switchPage('performance')">📊 Performance</button>
+            <button class="nav-tab nav-tab-add" id="nav-add" onclick="openAddExercise()">+ Add</button>
         </div>
     </header>
 
     <div class="page active" id="page-activities">
     <div class="container">
-        <!-- Add Exercise Form -->
-        <div class="workout-form">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                <h2 style="margin-bottom:0;font-size:0.95rem;">Add Exercise</h2>
-                <div style="display:flex; gap:8px; align-items:center;">
-                    <button class="btn btn-secondary btn-small" onclick="openFieldSettings()">⚙️ Fields</button>
-                    <button class="btn btn-secondary btn-small" onclick="openGenerateWeek()">🔄 Generate Week</button>
-                    <button class="btn btn-secondary btn-small" id="collapse-form-btn" onclick="toggleFormCollapse()">▲</button>
+        <!-- Weekly Workouts -->
+        <div id="weeks-container"></div>
+    </div>
+    </div>
+
+    <!-- Add Exercise Modal -->
+    <div class="modal-overlay" id="add-exercise-modal">
+        <div class="modal" style="max-width:380px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                <h2 style="margin:0;color:#27ae60;">Add Exercise</h2>
+                <div style="display:flex;gap:6px;">
+                    <button type="button" class="btn btn-secondary btn-small" onclick="closeAddExercise(); openGenerateWeek();">🔄 Generate</button>
+                    <button type="button" class="btn btn-secondary btn-small" onclick="closeAddExercise(); openFieldSettings();">⚙️ Fields</button>
                 </div>
             </div>
-            <div id="form-body">
             <div class="form-row">
-                <div class="form-group" style="max-width:33%;">
+                <div class="form-group" style="flex:0;min-width:auto;">
                     <label for="entry-date">Date</label>
-                    <input type="date" id="entry-date" style="width:100%;">
+                    <input type="date" id="entry-date">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="entry-type">Type</label>
+                    <select id="entry-type" onchange="onTypeChange()">
+                        <option value="strength" selected>🏋️ Strength</option>
+                        <option value="cardio">🏃 Cardio</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="entry-intensity">Intensity</label>
@@ -1014,24 +984,13 @@
                         <option value="Lightweight Baby">Lightweight Baby</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label for="entry-type">Type</label>
-                    <select id="entry-type" onchange="onTypeChange()">
-                        <option value="strength" selected>🏋️ Strength</option>
-                        <option value="cardio">🏃 Cardio</option>
-                    </select>
-                </div>
             </div>
             <div id="dynamic-fields"></div>
-            <div style="display:flex; justify-content:flex-end; margin-top:12px;">
-                <button class="btn btn-primary" id="add-entry-btn">+ Add</button>
-            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeAddExercise()">Close</button>
+                <button type="button" class="btn" style="background:#27ae60;color:#fff;" id="add-entry-btn">+ Add</button>
             </div>
         </div>
-
-        <!-- Weekly Workouts -->
-        <div id="weeks-container"></div>
-    </div>
     </div>
 
     <!-- Performance Page -->
@@ -1063,8 +1022,8 @@
 
     <!-- Edit Modal -->
     <div class="modal-overlay" id="edit-modal">
-        <div class="modal" style="max-width:380px;">
-            <h2>Edit Exercise</h2>
+        <div class="modal" style="max-width:260px;">
+            <h2 style="color:#2980b9;">Edit Exercise</h2>
             <input type="hidden" id="edit-id">
             <input type="hidden" id="edit-date">
             <input type="hidden" id="edit-intensity" value="">
@@ -1106,20 +1065,22 @@
             </div>
             <div class="modal-actions">
                 <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
-                <button type="button" class="btn btn-primary" onclick="saveEdit()">Save</button>
+                <button type="button" class="btn" style="background:#2980b9;color:#fff;" onclick="saveEdit()">Save</button>
             </div>
         </div>
     </div>
 
     <!-- Reorder Modal -->
     <div class="modal-overlay" id="reorder-modal">
-        <div class="modal" style="max-width:420px;">
-            <h2>⚙️ Edit Day</h2>
-            <div class="form-row" style="margin-bottom:15px;">
+        <div class="modal" style="max-width:320px;">
+            <h2 style="color:#f1c40f;">⚙️ Edit Day</h2>
+            <div class="form-row" style="margin-bottom:8px;">
                 <div class="form-group">
                     <label for="reorder-date">Date</label>
                     <input type="date" id="reorder-date">
                 </div>
+            </div>
+            <div class="form-row" style="margin-bottom:15px;">
                 <div class="form-group">
                     <label for="reorder-intensity">Intensity</label>
                     <select id="reorder-intensity">
@@ -1133,7 +1094,7 @@
             <div id="reorder-list"></div>
             <div class="modal-actions">
                 <button class="btn btn-secondary" onclick="closeReorderModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="saveReorder()">Save Order</button>
+                <button class="btn" style="background:#f1c40f;color:#000;" onclick="saveReorder()">Save Order</button>
             </div>
         </div>
     </div>
@@ -1214,7 +1175,11 @@
             { key: 'load', label: 'Load', type: 'number', min: 0, step: 0.5, default: 0 },
             { key: 'rpe', label: 'RPE', type: 'number', min: 1, max: 10, step: 0.5, default: 7 },
             { key: 'inter', label: 'Rest', type: 'number', min: 0, step: 0.5, default: 2 },
-            { key: 'note', label: 'Note', type: 'text', placeholder: 'Optional note...', default: '', wide: true }
+            { key: 'note', label: 'Note', type: 'text', placeholder: 'Optional note...', default: '', wide: true },
+            { key: 'primaryMuscle', label: 'Primary', type: 'select', default: '', options: ['', 'Biceps', 'Calves', 'Chest', 'Core', 'Front Delts', 'Glutes', 'Hamstrings', 'Lats', 'Mid Delts', 'Quads', 'Rear Delts', 'Rhomboids', 'Spine', 'Traps', 'Triceps'] },
+            { key: 'secondaryMuscle', label: 'Secondary', type: 'select', default: '', options: ['', 'Biceps', 'Calves', 'Chest', 'Core', 'Front Delts', 'Glutes', 'Hamstrings', 'Lats', 'Mid Delts', 'Quads', 'Rear Delts', 'Rhomboids', 'Spine', 'Traps', 'Triceps'] },
+            { key: 'tertiaryMuscle', label: 'Tertiary', type: 'select', default: '', options: ['', 'Biceps', 'Calves', 'Chest', 'Core', 'Front Delts', 'Glutes', 'Hamstrings', 'Lats', 'Mid Delts', 'Quads', 'Rear Delts', 'Rhomboids', 'Spine', 'Traps', 'Triceps'] },
+            { key: 'quaternaryMuscle', label: 'Quaternary', type: 'select', default: '', options: ['', 'Biceps', 'Calves', 'Chest', 'Core', 'Front Delts', 'Glutes', 'Hamstrings', 'Lats', 'Mid Delts', 'Quads', 'Rear Delts', 'Rhomboids', 'Spine', 'Traps', 'Triceps'] }
         ];
 
         // Cardio field definitions
@@ -1266,19 +1231,14 @@
         }
         entryDate.value = getTodayBrazil();
 
-        // Collapse form
-        let formCollapsed = false;
-        function toggleFormCollapse() {
-            formCollapsed = !formCollapsed;
-            const body = document.getElementById('form-body');
-            const btn = document.getElementById('collapse-form-btn');
-            if (formCollapsed) {
-                body.style.display = 'none';
-                btn.textContent = '▼';
-            } else {
-                body.style.display = '';
-                btn.textContent = '▲';
-            }
+        // Add Exercise modal
+        function openAddExercise() {
+            renderDynamicFields();
+            document.getElementById('add-exercise-modal').classList.add('active');
+        }
+
+        function closeAddExercise() {
+            document.getElementById('add-exercise-modal').classList.remove('active');
         }
 
         // Current entry type
@@ -1302,23 +1262,24 @@
             const container = document.getElementById('dynamic-fields');
             const activeFields = getActiveFields();
 
-            // Split into two rows: first row = core fields, second row = rest
-            const row1 = activeFields.filter(f => firstRowKeys.includes(f.key));
-            const row2 = activeFields.filter(f => !firstRowKeys.includes(f.key));
+            // Row 1: Exercise, Note
+            const textFields = activeFields.filter(f => f.key === 'exercise' || f.key === 'note');
+            // Row 2: numeric fields (sets, reps, load, rpe, rest, duration, distance, pace)
+            const numericFields = activeFields.filter(f => f.key !== 'exercise' && f.key !== 'note');
 
             let html = '';
 
-            if (row1.length > 0) {
+            if (textFields.length > 0) {
                 html += '<div class="form-row">';
-                row1.forEach(field => {
+                textFields.forEach(field => {
                     html += buildFieldHtml(field);
                 });
                 html += '</div>';
             }
 
-            if (row2.length > 0) {
+            if (numericFields.length > 0) {
                 html += '<div class="form-row">';
-                row2.forEach(field => {
+                numericFields.forEach(field => {
                     html += buildFieldHtml(field);
                 });
                 html += '</div>';
@@ -1342,7 +1303,6 @@
             const stepAttr = field.step !== undefined ? ` step="${field.step}"` : '';
             const placeholderAttr = field.placeholder ? ` placeholder="${field.placeholder}"` : '';
             const valueAttr = field.default !== undefined && field.default !== '' ? ` value="${field.default}"` : '';
-            const inputmodeAttr = field.type === 'number' ? (field.step && field.step % 1 !== 0 ? ' inputmode="decimal"' : ' inputmode="numeric"') : '';
 
             let html = `<div class="form-group${wideClass}">`;
             html += `<label for="entry-${field.key}">${escapeHtml(field.label)}</label>`;
@@ -1354,16 +1314,8 @@
                 html += `<datalist id="exercise-suggestions">`;
                 pastExercises.forEach(ex => { html += `<option value="${escapeHtml(ex)}">`; });
                 html += `</datalist>`;
-            } else if (field.type === 'select' && field.options) {
-                html += `<select id="entry-${field.key}">`;
-                field.options.forEach(opt => {
-                    const label = opt === '' ? 'None' : opt;
-                    const selected = opt === field.default ? ' selected' : '';
-                    html += `<option value="${escapeHtml(opt)}"${selected}>${escapeHtml(label)}</option>`;
-                });
-                html += `</select>`;
             } else {
-                html += `<input type="${field.type}" id="entry-${field.key}"${minAttr}${maxAttr}${stepAttr}${placeholderAttr}${valueAttr}${inputmodeAttr}>`;
+                html += `<input type="${field.type}" id="entry-${field.key}"${minAttr}${maxAttr}${stepAttr}${placeholderAttr}${valueAttr}>`;
             }
 
             html += `</div>`;
@@ -1472,7 +1424,7 @@
 
         function renderFieldSettingsList() {
             const list = document.getElementById('fields-settings-list');
-            const currentSettings = getCurrentFieldSettings().filter(f => !f.key.includes('Muscle'));
+            const currentSettings = getCurrentFieldSettings();
             const defaults = getDefaultFieldsForType();
             const typeLabel = currentEntryType === 'cardio' ? '🏃 Cardio' : '🏋️ Strength';
 
@@ -1592,7 +1544,12 @@
             if (e.target === document.getElementById('fields-modal')) closeFieldSettings();
         });
 
-        // Initial render of dynamic fields (deferred to auth)
+        // Close add exercise modal on overlay click
+        document.getElementById('add-exercise-modal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('add-exercise-modal')) closeAddExercise();
+        });
+
+        // Initial render deferred to auth
         // renderDynamicFields();
 
         // Select all text on focus for number and text inputs in forms/modals
@@ -1662,6 +1619,15 @@
                 case 'Wooo': return 'intensity-wooo';
                 case 'Lightweight Baby': return 'intensity-lightweight-baby';
                 default: return 'intensity-wooo';
+            }
+        }
+
+        function getIntensityLabel(intensity) {
+            switch (intensity) {
+                case 'Alright': return '👌 Alright';
+                case 'Wooo': return '🔥 Wooo';
+                case 'Lightweight Baby': return '💀 Lightweight Baby';
+                default: return '🔥 ' + escapeHtml(intensity);
             }
         }
 
@@ -1900,7 +1866,7 @@
                             ${day.date === getTodayBrazil() ? '<span style="position:absolute;left:50%;transform:translateX(-50%);background:#e94560;color:#fff;font-size:0.6rem;padding:3px 10px;border-radius:4px;font-weight:bold;letter-spacing:1px;">TODAY - YEAH BUDDY!</span>' : ''}
                             <div>
                                 <button class="btn-reorder" onclick="openReorderModal('${day.date}')" title="Edit Day">⚙️</button>
-                                <span class="day-intensity-badge ${getIntensityClass(dayIntensity)}">${escapeHtml(dayIntensity)}</span>
+                                <span class="day-intensity-badge ${getIntensityClass(dayIntensity)}">${getIntensityLabel(dayIntensity)}</span>
                             </div>
                         </div>
                         ${strengthTable}
@@ -2599,7 +2565,7 @@
             if (e.target === document.getElementById('generate-week-modal')) closeGenerateWeek();
         });
 
-        // Initial render (deferred to auth)
+        // Initial render deferred to auth
         // renderWeeks();
 
         // Page switching
@@ -3397,102 +3363,24 @@
             if (e.target === document.getElementById('muscle-config-modal')) closeMuscleConfig();
         });
     </script>
-    </div><!-- end app-container -->
-
+    </div>
     <script>
-        // Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyB4Vv9C2uGMyh4TW1F_jC1N6zlFYOJA9no",
-            authDomain: "asset-scout-ab025.firebaseapp.com",
-            projectId: "asset-scout-ab025",
-            storageBucket: "asset-scout-ab025.firebasestorage.app",
-            messagingSenderId: "54068421044",
-            appId: "1:54068421044:web:73ac8150f1942286fed2e1"
-        };
+        const firebaseConfig = { apiKey: "AIzaSyB4Vv9C2uGMyh4TW1F_jC1N6zlFYOJA9no", authDomain: "asset-scout-ab025.firebaseapp.com", projectId: "asset-scout-ab025", storageBucket: "asset-scout-ab025.firebasestorage.app", messagingSenderId: "54068421044", appId: "1:54068421044:web:73ac8150f1942286fed2e1" };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
-        let currentUser = null;
-        let isSignUp = false;
-
-        function toggleAuthMode() {
-            isSignUp = !isSignUp;
-            document.getElementById('auth-title').textContent = isSignUp ? 'Sign Up' : 'Login';
-            document.querySelector('#auth-container .btn').textContent = isSignUp ? 'Sign Up' : 'Login';
-            document.querySelector('.auth-toggle').textContent = isSignUp ? 'Already have an account? Login' : "Don't have an account? Sign up";
-            document.getElementById('auth-error').textContent = '';
-        }
-
-        async function handleAuth() {
-            const email = document.getElementById('auth-email').value.trim();
-            const password = document.getElementById('auth-password').value;
-            document.getElementById('auth-error').textContent = '';
-            if (!email || !password) { document.getElementById('auth-error').textContent = 'Enter email and password.'; return; }
-            try {
-                if (isSignUp) await auth.createUserWithEmailAndPassword(email, password);
-                else await auth.signInWithEmailAndPassword(email, password);
-            } catch (err) { document.getElementById('auth-error').textContent = err.message; }
-        }
-
+        let currentUser = null; let isSignUp = false;
+        function toggleAuthMode() { isSignUp = !isSignUp; document.getElementById('auth-title').textContent = isSignUp ? 'Sign Up' : 'Login'; document.querySelector('#auth-container .btn').textContent = isSignUp ? 'Sign Up' : 'Login'; document.querySelector('.auth-toggle').textContent = isSignUp ? 'Already have an account? Login' : "Don't have an account? Sign up"; document.getElementById('auth-error').textContent = ''; }
+        async function handleAuth() { const email = document.getElementById('auth-email').value.trim(); const password = document.getElementById('auth-password').value; document.getElementById('auth-error').textContent = ''; if (!email || !password) { document.getElementById('auth-error').textContent = 'Enter email and password.'; return; } try { if (isSignUp) await auth.createUserWithEmailAndPassword(email, password); else await auth.signInWithEmailAndPassword(email, password); } catch (err) { document.getElementById('auth-error').textContent = err.message; } }
         function logout() { auth.signOut(); }
-
-        auth.onAuthStateChanged(async (user) => {
-            if (user) {
-                currentUser = user;
-                document.getElementById('auth-container').style.display = 'none';
-                document.getElementById('app-container').style.display = 'block';
-                document.getElementById('user-email').textContent = user.email;
-                await loadUserData();
-            } else {
-                currentUser = null;
-                document.getElementById('auth-container').style.display = 'block';
-                document.getElementById('app-container').style.display = 'none';
-            }
-        });
-
-        async function loadUserData() {
-            try {
-                const doc = await db.collection('yeahbuddy_users').doc(currentUser.uid).get();
-                if (doc.exists) {
-                    const data = doc.data();
-                    entries = data.entries || [];
-                    dayNotes = data.dayNotes || {};
-                    savedTemplates = data.templates || [];
-                    collapsedWeeks = data.collapsedWeeks || {};
-                    if (data.fieldSettings) fieldSettings = data.fieldSettings;
-                    if (data.cardioFieldSettings) cardioFieldSettings = data.cardioFieldSettings;
-                }
-                fieldSettings.forEach(f => {
-                    if (f.key === 'load' && f.label === 'Load (Kg)') f.label = 'Load';
-                    if (f.key === 'inter' && f.label === 'Rest (min)') f.label = 'Rest';
-                });
-                autoAssignMuscles();
-                renderDynamicFields();
-                renderWeeks();
-            } catch (err) { console.error('Load error:', err); }
-        }
-
-        async function saveToFirestore() {
-            if (!currentUser) return;
-            try {
-                await db.collection('yeahbuddy_users').doc(currentUser.uid).set({
-                    entries, dayNotes, templates: savedTemplates, collapsedWeeks, fieldSettings, cardioFieldSettings,
-                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-            } catch (err) { console.error('Save error:', err); }
-        }
-
-        // Override saves to also push to Firestore
-        const _saveEntries = saveEntries;
-        saveEntries = function() { _saveEntries(); saveToFirestore(); };
-        const _saveDayNotes = saveDayNotes;
-        saveDayNotes = function() { _saveDayNotes(); saveToFirestore(); };
-        const _saveTemplates = saveTemplates;
-        saveTemplates = function() { _saveTemplates(); saveToFirestore(); };
-        const _saveCollapsed = saveCollapsed;
-        saveCollapsed = function() { _saveCollapsed(); saveToFirestore(); };
-        const _saveFieldSettings = saveFieldSettingsData;
-        saveFieldSettingsData = function() { _saveFieldSettings(); saveToFirestore(); };
+        auth.onAuthStateChanged(async (user) => { if (user) { currentUser = user; document.getElementById('auth-container').style.display = 'none'; document.getElementById('app-container').style.display = 'block'; document.getElementById('user-email').textContent = user.email; await loadUserData(); } else { currentUser = null; document.getElementById('auth-container').style.display = 'block'; document.getElementById('app-container').style.display = 'none'; } });
+        async function loadUserData() { try { const doc = await db.collection('yeahbuddy_users').doc(currentUser.uid).get(); if (doc.exists) { const data = doc.data(); entries = data.entries || []; dayNotes = data.dayNotes || {}; savedTemplates = data.templates || []; collapsedWeeks = data.collapsedWeeks || {}; if (data.fieldSettings) fieldSettings = data.fieldSettings; if (data.cardioFieldSettings) cardioFieldSettings = data.cardioFieldSettings; } fieldSettings.forEach(f => { if (f.key === 'load' && f.label === 'Load (Kg)') f.label = 'Load'; if (f.key === 'inter' && f.label === 'Rest (min)') f.label = 'Rest'; }); autoAssignMuscles(); renderDynamicFields(); renderWeeks(); } catch (err) { console.error('Load error:', err); } }
+        async function saveToFirestore() { if (!currentUser) return; try { await db.collection('yeahbuddy_users').doc(currentUser.uid).set({ entries, dayNotes, templates: savedTemplates, collapsedWeeks, fieldSettings, cardioFieldSettings, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }); } catch (err) { console.error('Save error:', err); } }
+        const _saveEntries = saveEntries; saveEntries = function() { _saveEntries(); saveToFirestore(); };
+        const _saveDayNotes = saveDayNotes; saveDayNotes = function() { _saveDayNotes(); saveToFirestore(); };
+        const _saveTemplates = saveTemplates; saveTemplates = function() { _saveTemplates(); saveToFirestore(); };
+        const _saveCollapsed = saveCollapsed; saveCollapsed = function() { _saveCollapsed(); saveToFirestore(); };
+        const _saveFieldSettings = saveFieldSettingsData; saveFieldSettingsData = function() { _saveFieldSettings(); saveToFirestore(); };
     </script>
 </body>
 </html>
