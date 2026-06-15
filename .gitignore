@@ -1,3 +1,12 @@
 node_modules/
 .firebase/
 *.log
+
+# Local files
+.firebaserc
+check.js
+firebase.json
+yeah-buddy-dev.html
+yeah-buddy-iphone.html
+yeah-buddy-stage.html
+yeah-buddy.html
