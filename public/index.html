@@ -1424,7 +1424,7 @@
 
         function renderFieldSettingsList() {
             const list = document.getElementById('fields-settings-list');
-            const currentSettings = getCurrentFieldSettings();
+            const currentSettings = getCurrentFieldSettings().filter(f => !f.key.includes('Muscle'));
             const defaults = getDefaultFieldsForType();
             const typeLabel = currentEntryType === 'cardio' ? '🏃 Cardio' : '🏋️ Strength';
 
@@ -2384,8 +2384,9 @@
             const select = document.getElementById('generate-source-week');
             const selectedKey = select.value;
 
-            // Get current week's Monday
-            const today = new Date();
+            // Get current week's Monday (Brazil time)
+            const todayStr = getTodayBrazil();
+            const today = new Date(todayStr + 'T00:00:00');
             const todayDay = today.getDay();
             const mondayOffset = todayDay === 0 ? -6 : 1 - todayDay;
             const currentMonday = new Date(today);
@@ -2402,7 +2403,7 @@
                     template.days.forEach(day => {
                         const newDate = new Date(currentMonday);
                         newDate.setDate(currentMonday.getDate() + day.dayOffset);
-                        const newDateStr = newDate.toISOString().split('T')[0];
+                        const newDateStr = newDate.getFullYear() + '-' + String(newDate.getMonth()+1).padStart(2,'0') + '-' + String(newDate.getDate()).padStart(2,'0');
                         const dayName = newDate.toLocaleDateString('en-US', { weekday: 'long' });
 
                         generateWeekData.push({
@@ -2440,7 +2441,7 @@
                         const dayDiff = Math.round((srcDate - sourceMonday) / 86400000);
                         const newDate = new Date(currentMonday);
                         newDate.setDate(currentMonday.getDate() + dayDiff);
-                        const newDateStr = newDate.toISOString().split('T')[0];
+                        const newDateStr = newDate.getFullYear() + '-' + String(newDate.getMonth()+1).padStart(2,'0') + '-' + String(newDate.getDate()).padStart(2,'0');
                         const dayName = newDate.toLocaleDateString('en-US', { weekday: 'long' });
 
                         const dayData = {
