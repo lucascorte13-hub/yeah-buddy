@@ -2488,12 +2488,12 @@
 
                 return `
                     <div class="gen-day-section">
-                        <div class="gen-day-header">
-                            ${escapeHtml(day.dayName)} — ${formatDate(day.date)}
-                            <select onchange="generateWeekData[${dayIdx}].intensity = this.value" style="margin-left:10px; padding:3px 8px; border-radius:4px; background:#16213e; color:#eee; border:1px solid #0f3460; font-size:0.8rem;">
-                                <option value="Alright" ${day.intensity === 'Alright' ? 'selected' : ''}>Alright</option>
-                                <option value="Wooo" ${day.intensity === 'Wooo' ? 'selected' : ''}>Wooo</option>
-                                <option value="Lightweight Baby" ${day.intensity === 'Lightweight Baby' ? 'selected' : ''}>Lightweight Baby</option>
+                        <div class="gen-day-header" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                            <input type="date" value="${day.date}" onchange="updateGenDay(${dayIdx}, this.value)" style="padding:3px 6px;border-radius:4px;background:#16213e;color:#eee;border:1px solid #0f3460;font-size:0.8rem;">
+                            <select onchange="generateWeekData[${dayIdx}].intensity = this.value" style="padding:3px 8px; border-radius:4px; background:#16213e; color:#eee; border:1px solid #0f3460; font-size:0.8rem;">
+                                <option value="Alright" ${day.intensity === 'Alright' ? 'selected' : ''}>👌 Alright</option>
+                                <option value="Wooo" ${day.intensity === 'Wooo' ? 'selected' : ''}>🔥 Wooo</option>
+                                <option value="Lightweight Baby" ${day.intensity === 'Lightweight Baby' ? 'selected' : ''}>💀 Lightweight Baby</option>
                             </select>
                         </div>
                         ${exercisesHtml}
@@ -2501,6 +2501,12 @@
                     </div>
                 `;
             }).join('');
+        }
+
+        function updateGenDay(dayIdx, newDate) {
+            generateWeekData[dayIdx].date = newDate;
+            const d = new Date(newDate + 'T00:00:00');
+            generateWeekData[dayIdx].dayName = d.toLocaleDateString('en-US', { weekday: 'long' });
         }
 
         function removeGenExercise(dayIdx, exIdx) {
